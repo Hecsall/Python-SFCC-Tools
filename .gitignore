@@ -1,0 +1,6 @@
+venv/
+.DS_Store
+.tmp
+.temp
+*.xml
+!*.example.xml
