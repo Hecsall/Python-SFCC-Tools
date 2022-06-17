@@ -22,7 +22,9 @@ images = tree.findall('//{schema}image'.format(schema=SFCC_CATALOG_SCHEMA))
 images_paths = []
 
 for image in images:
-    images_paths.append('default/images{}'.format(image.get('path')))
+    path = 'default/images{}'.format(image.get('path'))
+    if path not in images_paths:
+        images_paths.append('default/images{}'.format(image.get('path')))
 
 print("\nDone")
 
