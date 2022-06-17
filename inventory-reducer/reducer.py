@@ -51,25 +51,19 @@ for product in site_inventory_products:
         try:
             product.find('{schema}allocation'.format(schema=SFCC_INVENTORY_SCHEMA)).text = '100'
         except AttributeError:
-            allocation = etree.Element('allocation', {'schema': SFCC_INVENTORY_SCHEMA})
-            allocation.text = '100'
-            product.append(allocation)
+            pass
 
         # Set or create ats
         try:
             product.find('{schema}ats'.format(schema=SFCC_INVENTORY_SCHEMA)).text = '100'
         except AttributeError:
-            ats = etree.Element('ats', {'schema': SFCC_INVENTORY_SCHEMA})
-            ats.text = '100'
-            product.append(ats)
+            pass
 
         # Set or create perpetual
         try:
             product.find('{schema}perpetual'.format(schema=SFCC_INVENTORY_SCHEMA)).text = 'true'
         except AttributeError:
-            perpetual = etree.Element('perpetual', {'schema': SFCC_INVENTORY_SCHEMA})
-            perpetual.text = 'true'
-            product.append(perpetual)
+            pass
 
 minproducts = inventory_tree.findall('//{schema}record'.format(schema=SFCC_INVENTORY_SCHEMA))
 

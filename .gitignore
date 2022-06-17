@@ -4,3 +4,4 @@ venv/
 .temp
 *.xml
 !*.example.xml
+images-list.txt
