@@ -1,4 +1,3 @@
-import argparse
 from pathlib import Path
 from lxml import etree
 
@@ -24,7 +23,6 @@ print("Starting to parse master catalog\n{}".format(MASTER_CATALOG_FILE_PATH))
 print("Please wait...")
 
 master_tree = etree.parse(MASTER_CATALOG_FILE_PATH)
-# master_root = master_tree.getroot()
 
 master_catalog_products = master_tree.findall('//{schema}product'.format(schema=SFCC_CATALOG_SCHEMA))
 master_products_ids = []
