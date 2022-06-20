@@ -29,5 +29,5 @@ for image in images:
 print("\nDone")
 
 f = open(IMAGES_LIST_FILE, 'w')
-f.write('\n'.join(images_paths))
+f.write('\n'.join(sorted(images_paths)))
 f.close()
