@@ -1,7 +1,7 @@
 
 # **Get Product Images**
 The `image.py` script will create a list of images that are linked inside the masterCatalog.
-Place your masterCatalog file (named `masterCatalog.min.xml`) inside this folder and run the python script.
+Place inside the repository root folder your masterCatalog file (named `masterCatalog.min.xml`) and run the python script.
 
 Once the txt is created, using the `copy-images.sh` script from your terminal it will use your rclone config credentials to copy those images from a Development instance to your Sandbox.
 
