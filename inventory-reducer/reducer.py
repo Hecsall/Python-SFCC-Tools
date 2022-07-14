@@ -2,13 +2,13 @@ from pathlib import Path
 from lxml import etree
 
 
-# Current working directory (do not change)
-CURRENT_DIRECTORY = Path(__file__).parent
+# Repo root directory (do not change)
+ROOT_DIRECTORY = Path(__file__).parent.parent
 # Path to the master catalog file
-MASTER_CATALOG_FILE_PATH = CURRENT_DIRECTORY / "masterCatalog.min.xml"
+MASTER_CATALOG_FILE_PATH = ROOT_DIRECTORY / "masterCatalog.min.xml"
 # Path to the inventory file
-SITE_INVENTORY_FILE_PATH = CURRENT_DIRECTORY / "inventory.xml"
-# Destination path for the reduced site catalog
+SITE_INVENTORY_FILE_PATH = ROOT_DIRECTORY / "inventory.xml"
+# Destination path for the reduced inventory
 REDUCED_SITE_INVENTORY_FILE_PATH = SITE_INVENTORY_FILE_PATH.with_suffix('.min.xml')
 # Catalog XML schema to be used with lxml (do not change)
 SFCC_CATALOG_SCHEMA = "{http://www.demandware.com/xml/impex/catalog/2006-10-31}"
@@ -44,7 +44,7 @@ site_inventory_products = inventory_tree.findall('//{schema}record'.format(schem
 for product in site_inventory_products:
     pid = product.get('product-id')
     if pid not in master_products_ids:
-        print("{} - Product not found in master catalog, removing...".format(pid))
+        # print("{} - Product not found in master catalog, removing...".format(pid))
         product.getparent().remove(product)
     else:
         # Set or create allocation

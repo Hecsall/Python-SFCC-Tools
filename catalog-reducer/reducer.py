@@ -1,15 +1,21 @@
+from doctest import master
 from pathlib import Path
 from lxml import etree
 
 
-# Current working directory (do not change)
-CURRENT_DIRECTORY = Path(__file__).parent
+# Repo root directory (do not change)
+ROOT_DIRECTORY = Path(__file__).parent.parent
 # Path to the master catalog file
-MASTER_CATALOG_FILE_PATH = CURRENT_DIRECTORY / "masterCatalog.xml"
+MASTER_CATALOG_FILE_PATH = ROOT_DIRECTORY / "masterCatalog.xml"
 # Destination path for the reduced catalog
 REDUCED_CATALOG_FILE_PATH = MASTER_CATALOG_FILE_PATH.with_suffix('.min.xml')
 # Catalog XML schema to be used with lxml (do not change)
 SFCC_CATALOG_SCHEMA = "{http://www.demandware.com/xml/impex/catalog/2006-10-31}"
+
+
+# Check if files exist before attempting to read them
+if not MASTER_CATALOG_FILE_PATH.exists():
+    raise Exception('{} file not found'.format(MASTER_CATALOG_FILE_PATH.name))
 
 
 def is_online(product):
@@ -20,20 +26,51 @@ def is_online(product):
     return False
 
 
+def is_master(product):
+    variants = product.findall('{schema}variations//{schema}variants//{schema}variant'.format(schema=SFCC_CATALOG_SCHEMA))
+    if len(variants) > 0:
+        return True
+    return False
+   
+
 print("Starting to process catalog\n{}".format(MASTER_CATALOG_FILE_PATH))
 print("Please wait...")
 
 tree = etree.parse(MASTER_CATALOG_FILE_PATH)
 root = tree.getroot()
 
-# categories = tree.findall('//{schema}category'.format(schema=SFCC_CATALOG_SCHEMA))
 products = tree.findall('//{schema}product'.format(schema=SFCC_CATALOG_SCHEMA))
 
+# Creating arrays to store products in groups for later use.
+master_products = []
+deletable_products = []
+
 for product in products:
-    if not is_online(product):
-        pid = product.get('product-id')
-        # print("{} - not online, removing...".format(pid))
-        root.remove(product)
+    if is_master(product):
+        master_products.append(product)
+    elif not is_online(product):
+        deletable_products.append(product)
+
+# Search inside master products the ones that have only variants product-id present inside deletable_products.
+for master in master_products:
+    master_variants = master.find('{schema}variations//{schema}variants'.format(schema=SFCC_CATALOG_SCHEMA))
+    single_variants = master_variants.findall('{schema}variant'.format(schema=SFCC_CATALOG_SCHEMA))
+    for variant in single_variants:
+        variant_id = variant.attrib['product-id']
+        for deletable_product in deletable_products:
+            if variant_id in deletable_product.attrib['product-id']:
+                master_variants.remove(variant)
+                break
+
+# Delete Master products that have no more variants.
+for master in master_products:
+    variants = master.findall('{schema}variations//{schema}variants//{schema}variant'.format(schema=SFCC_CATALOG_SCHEMA))
+    if len(variants) == 0:
+        root.remove(master)
+
+# Remove all variants that are not online.
+for product in deletable_products:
+    root.remove(product)
 
 minproducts = tree.findall('//{schema}product'.format(schema=SFCC_CATALOG_SCHEMA))
 

@@ -2,12 +2,12 @@ from pathlib import Path
 from lxml import etree
 
 
-# Current working directory (do not change)
-CURRENT_DIRECTORY = Path(__file__).parent
+# Repo root directory (do not change)
+ROOT_DIRECTORY = Path(__file__).parent.parent
 # Path to the master catalog file
-MASTER_CATALOG_FILE_PATH = CURRENT_DIRECTORY / "masterCatalog.min.xml"
+MASTER_CATALOG_FILE_PATH = ROOT_DIRECTORY / "masterCatalog.min.xml"
 # Path to the site catalog file
-SITE_CATALOG_FILE_PATH = CURRENT_DIRECTORY / "siteCatalog.xml"
+SITE_CATALOG_FILE_PATH = ROOT_DIRECTORY / "siteCatalog.xml"
 # Destination path for the reduced site catalog
 REDUCED_SITE_CATALOG_FILE_PATH = SITE_CATALOG_FILE_PATH.with_suffix('.min.xml')
 # Catalog XML schema to be used with lxml (do not change)
@@ -43,7 +43,7 @@ site_catalog_category_assignments = site_tree.findall('//{schema}category-assign
 for assignment in site_catalog_category_assignments:
     pid = assignment.get('product-id')
     if pid not in master_products_ids:
-        print("{} - Product not found in master catalog, removing...".format(pid))
+        # print("{} - Product not found in master catalog, removing...".format(pid))
         site_root.remove(assignment)
 
 site_catalog_recommendations = site_tree.findall('//{schema}recommendation'.format(schema=SFCC_CATALOG_SCHEMA))
@@ -52,7 +52,7 @@ for recommendation in site_catalog_recommendations:
     sid = recommendation.get('source-id')
     tid = recommendation.get('target-id')
     if sid not in master_products_ids or tid not in master_products_ids:
-        print("{}/{} - Recommendation products not found in master catalog, removing...".format(sid, tid))
+        # print("{}/{} - Recommendation products not found in master catalog, removing...".format(sid, tid))
         site_root.remove(recommendation)
 
 minassignments = site_tree.findall('//{schema}category-assignment'.format(schema=SFCC_CATALOG_SCHEMA))

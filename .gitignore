@@ -5,3 +5,4 @@ venv/
 *.xml
 !*.example.xml
 images-list.txt
+master-images.txt

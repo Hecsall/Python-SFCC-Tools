@@ -4,11 +4,19 @@ from lxml import etree
 
 # Current working directory (do not change)
 CURRENT_DIRECTORY = Path(__file__).parent
+# Repo root directory (do not change)
+ROOT_DIRECTORY = Path(__file__).parent.parent
 # Path to the master catalog file
-MASTER_CATALOG_FILE_PATH = CURRENT_DIRECTORY / "masterCatalog.min.xml"
-IMAGES_LIST_FILE = CURRENT_DIRECTORY / "images-list.txt"
+MASTER_CATALOG_FILE_PATH = ROOT_DIRECTORY / "masterCatalog.min.xml"
+# Output path for the images list text file
+IMAGES_LIST_FILE = CURRENT_DIRECTORY / "master-images.txt"
 # Catalog XML schema to be used with lxml (do not change)
 SFCC_CATALOG_SCHEMA = "{http://www.demandware.com/xml/impex/catalog/2006-10-31}"
+
+
+# Check if files exist before attempting to read them
+if not MASTER_CATALOG_FILE_PATH.exists():
+    raise Exception('{} file not found'.format(MASTER_CATALOG_FILE_PATH.name))
 
 
 print("Starting to process catalog\n{}".format(MASTER_CATALOG_FILE_PATH))
