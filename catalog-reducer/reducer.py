@@ -1,4 +1,3 @@
-from doctest import master
 from pathlib import Path
 from lxml import etree
 
