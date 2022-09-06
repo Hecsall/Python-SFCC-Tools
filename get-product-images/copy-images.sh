@@ -1,8 +1,8 @@
-IMAGES_LIST_FILE="$(dirname $0)/master-images.txt"
+IMAGES_LIST_FILE="$(dirname $0)/images-to-copy.txt"
 
 # Check if file exists before running
 if [ ! -f $IMAGES_LIST_FILE ]; then
-    echo "master-images.txt not found, did you run imager.py?"
+    echo "images-to-copy.txt not found, did you run list-sandbox-images.sh?"
     exit 1
 fi
 
@@ -14,4 +14,4 @@ do
     # rclone copy /default/images/images/123.png /default/images/images
     rclone copy development:$p sandbox:$PARENT_DIR
     echo "Done $p"
-done < master-images.txt
+done < images-to-copy.txt
