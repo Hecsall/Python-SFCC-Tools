@@ -6,12 +6,5 @@ if [ ! -f $IMAGES_LIST_FILE ]; then
     exit 1
 fi
 
-
-while IFS="" read -r p || [ -n "$p" ]
-do
-    PARENT_DIR=$(dirname $p)
-    # Example
-    # rclone copy /default/images/images/123.png /default/images/images
-    rclone copy development:$p sandbox:$PARENT_DIR
-    echo "Done $p"
-done < images-to-copy.txt
+echo "Starting copy from development to sandbox, this will take a while..."
+rclone copy development: sandbox: --include-from=images-to-copy.txt -P -vv
